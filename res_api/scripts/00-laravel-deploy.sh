@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 echo "Running composer"
 composer global require hirak/prestissimo
-composer require laravel/breeze --dev
-php artisan breeze:install
-npm install
+
 composer install --no-dev --working-dir=/var/www/html
+composer global require laravel/breeze
+npm install
 
 
 echo "Caching config..."
@@ -13,5 +13,5 @@ php artisan config:cache
 echo "Caching routes..."
 php artisan route:cache
 
-echo "Running migrations..."
-php artisan migrate --force
+# echo "Running migrations..."
+# php artisan migrate --force
