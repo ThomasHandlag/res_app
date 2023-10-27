@@ -1,40 +1,20 @@
-# Use the official PHP image as the base image
-FROM php:8.0-apache
+FROM richarvey/nginx-php-fpm:3.1.6
 
-# Set the working directory in the container
-WORKDIR /var/www/html
-
-# Copy the application files to the container
 COPY . .
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    zip \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath opcache zip \
-    && a2enmod rewrite
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Set the required environment variables
+# Laravel config
 ENV APP_ENV production
-ENV APP_KEY <your_app_key>
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
 
-# Install the Composer dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Generate the application key
-RUN php artisan key:generate
-
-# Build the React assets
-RUN npm install
-RUN npm run production
-
-# Expose port 80 for HTTP traffic
-EXPOSE 80
-
-# Start the Apache server
-CMD ["apache2-foreground"]
+CMD ["/start.sh"]
