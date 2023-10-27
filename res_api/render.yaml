@@ -1,0 +1,7 @@
+services:
+  - name: app
+    env:
+      - key: APP_KEY
+        value: <base64:jD0TtCzNAR/xkTNPXXjZva6WjwwMASslWGT0vdiRslg=>
+    buildCommand: docker build -t $RENDER_SERVICE_NAME:$RENDER_GIT_COMMIT .
+    startCommand: docker run -p $PORT:$PORT -e APP_KEY=$APP_KEY $RENDER_SERVICE_NAME:$RENDER_GIT_COMMIT
