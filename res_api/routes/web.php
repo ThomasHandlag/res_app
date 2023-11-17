@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\LinuxController::class, 'index'])->name("home");
+
+Route::post('/store', [App\Http\Controllers\LinuxController::class, 'store']);
+
+Route::get('/create', [App\Http\Controllers\LinuxController::class, 'createForm']);
+Route::get('/delete', [App\Http\Controllers\LinuxController::class, 'delete'])->name("delete");
